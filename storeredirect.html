@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Get MarketCue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px;
+      text-align: center;
+    }
+    .logo { font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .tagline { font-size: 15px; color: #aaaaaa; margin-bottom: 40px; line-height: 1.6; }
+    .btn {
+      background: #e0171f;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      padding: 18px 48px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-block;
+      letter-spacing: 0.3px;
+      margin: 8px;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #444444;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-block;
+      letter-spacing: 0.3px;
+      margin: 8px;
+    }
+    .actions { display: flex; flex-direction: column; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="logo">MarketCue</div>
+  <div class="tagline" id="msg">Redirecting to the store&hellip;</div>
+  <div class="actions" id="actions"></div>
+  <script>
+    (function () {
+      var APP_STORE = 'https://apps.apple.com/app/6762165401';
+      var PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.developerof1.marketcue';
+
+      var ua = navigator.userAgent || '';
+      var isAndroid = /android/i.test(ua);
+      var isIOS = /iphone|ipad|ipod/i.test(ua);
+
+      var actions = document.getElementById('actions');
+      var msg = document.getElementById('msg');
+
+      if (isAndroid) {
+        msg.textContent = 'Taking you to Google Play…';
+        actions.innerHTML = '<a class="btn" href="' + PLAY_STORE + '">Get it on Google Play</a>';
+        setTimeout(function () { window.location.href = PLAY_STORE; }, 400);
+      } else if (isIOS) {
+        msg.textContent = 'Taking you to the App Store…';
+        actions.innerHTML = '<a class="btn" href="' + APP_STORE + '">Download on the App Store</a>';
+        setTimeout(function () { window.location.href = APP_STORE; }, 400);
+      } else {
+        msg.textContent = 'Get MarketCue on your phone.';
+        actions.innerHTML =
+          '<a class="btn" href="' + APP_STORE + '">Download on the App Store</a>' +
+          '<a class="btn-secondary" href="' + PLAY_STORE + '">Get it on Google Play</a>';
+      }
+    })();
+  </script>
+</body>
+</html>

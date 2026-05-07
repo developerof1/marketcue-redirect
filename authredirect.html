@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>MarketCue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px;
+      text-align: center;
+    }
+    .logo { font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .message { font-size: 17px; color: #aaaaaa; margin-bottom: 40px; line-height: 1.6; }
+    .btn {
+      background: #e0171f;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Manrope';
+      padding: 18px 48px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: none;
+      letter-spacing: 0.3px;
+    }
+    .error-text { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <div class="logo">MarketCue</div>
+  <div class="message" id="msg">Just a moment...</div>
+  <a class="btn" id="openBtn" href="#">Open MarketCue</a>
+  <script>
+    (function () {
+      var hash = window.location.hash;
+      var params = new URLSearchParams(hash.slice(1));
+      var scheme = new URLSearchParams(window.location.search.slice(1)).get('scheme') || 'marketcue';
+      var error = params.get('error');
+      var type = params.get('type');
+      var msg = document.getElementById('msg');
+      var btn = document.getElementById('openBtn');
+
+      if (error) {
+        msg.innerHTML =
+          'This link has expired or is no longer valid.<br>' +
+          '<span class="error-text">Please request a new one from the app.</span>';
+        return;
+      }
+
+      // type=recovery -> reset-password screen; everything else -> verify-email screen
+      var path = (type === 'recovery') ? 'reset-password' : 'verify-email';
+      var deepLink = scheme + '://' + path + hash;
+
+      btn.href = deepLink;
+      btn.style.display = 'inline-block';
+      msg.textContent = (type === 'recovery')
+        ? 'Ready to reset your password.'
+        : 'Email verified!';
+
+      // Android and desktop browsers: auto-redirect after brief pause.
+      // iOS Safari/Chrome block JS-initiated navigation to custom schemes
+      // without a user gesture, so iOS users tap the button instead.
+      setTimeout(function () {
+        window.location.href = deepLink;
+      }, 400);
+    })();
+  </script>
+</body>
+</html>
